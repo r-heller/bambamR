@@ -20,6 +20,18 @@ volcano plots, heatmaps, PCA, and MA plots.
 
 ### Minimal vs. Full Mode
 
+| Feature                   |  Minimal (CRAN)   | Full (+ Bioconductor) |
+|---------------------------|:-----------------:|:---------------------:|
+| CPM / TPM normalization   |        Yes        |          Yes          |
+| TMM / RLE normalization   |         –         |          Yes          |
+| DESeq2 / edgeR / limma    |         –         |          Yes          |
+| PCA, volcano, heatmap, MA |        Yes        |          Yes          |
+| Onco plots                |        Yes        |          Yes          |
+| FASTQ / BAM import        |      Base-R       | ShortRead / Rsamtools |
+| Alignment wrappers        |        Yes        |          Yes          |
+| Read counting             | featureCounts CLI |   GenomicAlignments   |
+| Shiny interactive app     |        Yes        |          Yes          |
+
 ## Installation
 
 Install from CRAN (when available):
@@ -48,10 +60,18 @@ BiocManager::install(c(
 library(bambamR)
 ```
 
+------------------------------------------------------------------------
+
 ## Bundled Example Data
 
 bambamR ships with ready-to-use datasets accessible via convenience
 functions:
+
+| Function                                                                                            | Contents                                            |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| [`bb_example_counts()`](https://rabanheller.github.io/bambamR/reference/bb_example_counts.md)       | 200 genes x 10 samples + metadata                   |
+| [`bb_example_mutations()`](https://rabanheller.github.io/bambamR/reference/bb_example_mutations.md) | 300 mutations, 50 samples, 20 genes + clinical data |
+| [`bb_example_de()`](https://rabanheller.github.io/bambamR/reference/bb_example_de.md)               | 500-gene pre-computed DE results                    |
 
 ``` r
 # RNA-seq count matrix (200 genes x 10 samples)
@@ -87,6 +107,8 @@ metadata
 #> Sample_10 treatment     B   F  44
 ```
 
+------------------------------------------------------------------------
+
 ## Normalization
 
 ### CPM (Counts Per Million)
@@ -118,6 +140,8 @@ tmm <- bb_normalize(counts, method = "tmm")  # requires edgeR
 rle <- bb_normalize(counts, method = "rle")  # requires DESeq2
 ```
 
+------------------------------------------------------------------------
+
 ## Visualization
 
 All plot functions return `ggplot2` objects that can be further
@@ -144,6 +168,8 @@ effect.](bambamR-guide_files/figure-html/pca-batch-1.png)
 
 PCA plot with shape mapping for batch effect.
 
+------------------------------------------------------------------------
+
 ### Heatmap
 
 ``` r
@@ -154,6 +180,8 @@ bb_heatmap(cpm, n_genes = 30)
 genes.](bambamR-guide_files/figure-html/heatmap-var-1.png)
 
 Heatmap of the 30 most variable genes.
+
+------------------------------------------------------------------------
 
 ### Volcano Plot
 
@@ -174,6 +202,8 @@ bb_volcano(de_results, fc_cutoff = 1, p_cutoff = 0.05, n_label = 8)
 genes.](bambamR-guide_files/figure-html/volcano-1.png)
 
 Volcano plot highlighting differentially expressed genes.
+
+------------------------------------------------------------------------
 
 ``` r
 bb_volcano(de_results,
@@ -199,6 +229,8 @@ expression.](bambamR-guide_files/figure-html/ma-plot-1.png)
 
 MA plot showing fold-change vs.~mean expression.
 
+------------------------------------------------------------------------
+
 ### Heatmap of Top DE Genes
 
 ``` r
@@ -209,6 +241,8 @@ bb_heatmap(cpm, de_result = de_results, n_genes = 25)
 genes.](bambamR-guide_files/figure-html/heatmap-de-1.png)
 
 Heatmap of the top 25 differentially expressed genes.
+
+------------------------------------------------------------------------
 
 ## Oncoplot
 
@@ -245,6 +279,8 @@ bb_oncoplot(mut$mutations, n_genes = 10, show_barplot = FALSE)
 genes.](bambamR-guide_files/figure-html/oncoplot-basic-1.png)
 
 Oncoplot showing the top 10 mutated genes.
+
+------------------------------------------------------------------------
 
 ### Oncoplot with Clinical Annotations
 
@@ -293,6 +329,8 @@ bb_oncoplot(mut$mutations, n_genes = 8,
 palette.](bambamR-guide_files/figure-html/oncoplot-colors-1.png)
 
 Oncoplot with a custom color palette.
+
+------------------------------------------------------------------------
 
 ## FASTQ Import
 
@@ -355,6 +393,8 @@ length distribution.](bambamR-guide_files/figure-html/qc-plot-1.png)
 QC visualization panel: per-position quality, GC content, and read
 length distribution.
 
+------------------------------------------------------------------------
+
 ## Differential Expression
 
 Three DE methods are supported, each requiring an optional Bioconductor
@@ -388,6 +428,8 @@ bb_export_csv(de_results, "de_results.csv")
 bb_export_tsv(de_results, "de_results.tsv")
 bb_export_rds(de_results, "de_results.rds")
 ```
+
+------------------------------------------------------------------------
 
 ## Full Pipeline
 
@@ -449,7 +491,74 @@ The app provides:
 - Interactive plots (volcano, PCA, heatmap, MA, oncoplot)
 - One-click export (CSV, RDS, PDF)
 
+------------------------------------------------------------------------
+
 ## Function Reference
+
+#### Import
+
+| Function                                                                              | Description        |
+|---------------------------------------------------------------------------------------|--------------------|
+| [`bb_read_fastq()`](https://rabanheller.github.io/bambamR/reference/bb_read_fastq.md) | Read FASTQ files   |
+| [`bb_read_bam()`](https://rabanheller.github.io/bambamR/reference/bb_read_bam.md)     | Read BAM files     |
+| [`bb_count_bam()`](https://rabanheller.github.io/bambamR/reference/bb_count_bam.md)   | Count reads in BAM |
+
+#### Quality Control
+
+| Function                                                                              | Description            |
+|---------------------------------------------------------------------------------------|------------------------|
+| [`bb_qc()`](https://rabanheller.github.io/bambamR/reference/bb_qc.md)                 | Compute QC metrics     |
+| [`bb_qc_summary()`](https://rabanheller.github.io/bambamR/reference/bb_qc_summary.md) | Tabular QC summary     |
+| [`bb_plot_qc()`](https://rabanheller.github.io/bambamR/reference/bb_plot_qc.md)       | QC visualization panel |
+
+#### Alignment & Counting
+
+| Function                                                                                | Description                         |
+|-----------------------------------------------------------------------------------------|-------------------------------------|
+| [`bb_align()`](https://rabanheller.github.io/bambamR/reference/bb_align.md)             | Align with STAR / HISAT2 / minimap2 |
+| [`bb_count_reads()`](https://rabanheller.github.io/bambamR/reference/bb_count_reads.md) | Count reads per gene                |
+
+#### Normalization
+
+| Function                                                                            | Description           |
+|-------------------------------------------------------------------------------------|-----------------------|
+| [`bb_normalize()`](https://rabanheller.github.io/bambamR/reference/bb_normalize.md) | CPM, TPM, TMM, or RLE |
+
+#### Differential Expression
+
+| Function                                                                              | Description                    |
+|---------------------------------------------------------------------------------------|--------------------------------|
+| [`bb_deseq2()`](https://rabanheller.github.io/bambamR/reference/bb_deseq2.md)         | DESeq2 wrapper                 |
+| [`bb_edger()`](https://rabanheller.github.io/bambamR/reference/bb_edger.md)           | edgeR quasi-likelihood wrapper |
+| [`bb_limma_voom()`](https://rabanheller.github.io/bambamR/reference/bb_limma_voom.md) | limma-voom wrapper             |
+
+#### Visualization
+
+| Function                                                                          | Description             |
+|-----------------------------------------------------------------------------------|-------------------------|
+| [`bb_oncoplot()`](https://rabanheller.github.io/bambamR/reference/bb_oncoplot.md) | Waterfall mutation plot |
+| [`bb_volcano()`](https://rabanheller.github.io/bambamR/reference/bb_volcano.md)   | Volcano plot            |
+| [`bb_heatmap()`](https://rabanheller.github.io/bambamR/reference/bb_heatmap.md)   | Clustered heatmap       |
+| [`bb_pca()`](https://rabanheller.github.io/bambamR/reference/bb_pca.md)           | PCA plot                |
+| [`bb_ma_plot()`](https://rabanheller.github.io/bambamR/reference/bb_ma_plot.md)   | MA plot                 |
+
+#### Pipeline & Export
+
+| Function                                                                              | Description              |
+|---------------------------------------------------------------------------------------|--------------------------|
+| [`bb_pipeline()`](https://rabanheller.github.io/bambamR/reference/bb_pipeline.md)     | Full end-to-end pipeline |
+| [`bb_export_csv()`](https://rabanheller.github.io/bambamR/reference/bb_export_csv.md) | Export as CSV            |
+| [`bb_export_tsv()`](https://rabanheller.github.io/bambamR/reference/bb_export_tsv.md) | Export as TSV            |
+| [`bb_export_rds()`](https://rabanheller.github.io/bambamR/reference/bb_export_rds.md) | Export as RDS            |
+
+#### Example Data & App
+
+| Function                                                                                            | Description            |
+|-----------------------------------------------------------------------------------------------------|------------------------|
+| [`bb_example_counts()`](https://rabanheller.github.io/bambamR/reference/bb_example_counts.md)       | Example count matrix   |
+| [`bb_example_mutations()`](https://rabanheller.github.io/bambamR/reference/bb_example_mutations.md) | Example mutation data  |
+| [`bb_example_de()`](https://rabanheller.github.io/bambamR/reference/bb_example_de.md)               | Example DE results     |
+| [`bb_run_app()`](https://rabanheller.github.io/bambamR/reference/bb_run_app.md)                     | Launch Shiny dashboard |
 
 ## Citation
 
@@ -457,7 +566,7 @@ If you use bambamR in your research, please cite:
 
 > Heller R, Witte H, Steinestel K (2026). *bambamR: End-to-End RNA-Seq
 > Processing from FASTQ to Publication-Ready Plots.* R package version
-> 0.1.0.
+> 0.1.0. <https://github.com/rabanheller/bambamR>
 
 ## Session Info
 

@@ -11,6 +11,8 @@ available.
 
 Useful links:
 
+- <https://rabanheller.github.io/bambamR/>
+
 - <https://github.com/rabanheller/bambamR>
 
 - Report bugs at <https://github.com/rabanheller/bambamR/issues>
