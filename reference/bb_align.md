@@ -1,0 +1,76 @@
+# Align Reads to Reference Genome
+
+Wrapper for STAR, HISAT2, or minimap2 alignment tools. Checks that the
+selected aligner is available on the system PATH before running.
+
+## Usage
+
+``` r
+bb_align(
+  fastq,
+  genome_index,
+  output_dir,
+  aligner = c("STAR", "HISAT2", "minimap2"),
+  threads = 4L,
+  paired = FALSE,
+  extra_args = NULL
+)
+```
+
+## Arguments
+
+- fastq:
+
+  Character. Path(s) to FASTQ files. For paired-end, provide a character
+  vector of length 2.
+
+- genome_index:
+
+  Character. Path to genome index directory (STAR) or index prefix
+  (HISAT2, minimap2).
+
+- output_dir:
+
+  Character. Output directory for BAM files.
+
+- aligner:
+
+  Character. One of `"STAR"`, `"HISAT2"`, `"minimap2"`.
+
+- threads:
+
+  Integer. Number of threads. Default `4`.
+
+- paired:
+
+  Logical. Paired-end mode. If `TRUE`, `fastq` must have 2 elements.
+  Default `FALSE`.
+
+- extra_args:
+
+  Character or NULL. Additional arguments to pass to the aligner.
+
+## Value
+
+A list with components:
+
+- bam:
+
+  Path to the output BAM file
+
+- stats:
+
+  A data.frame with alignment statistics
+
+- command:
+
+  The exact command that was executed
+
+## Examples
+
+``` r
+# \donttest{
+# Requires STAR/HISAT2/minimap2 installed
+# result <- bb_align("reads.fastq", "/path/to/index", "output/")
+# }
+```
