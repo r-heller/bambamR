@@ -1,5 +1,7 @@
 # bambamR Quick Start Guide
 
+![](../reference/figures/logo.png)
+
 ## Overview
 
 bambamR is an end-to-end RNA-seq analysis toolkit that takes you from

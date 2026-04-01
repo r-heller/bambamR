@@ -1,5 +1,7 @@
 # bambamR: End-to-End RNA-Seq Processing from FASTQ to Publication-Ready Plots
 
+![](../reference/figures/logo.png)
+
 ## Introduction
 
 **bambamR** is an R package for end-to-end RNA-seq analysis. It covers

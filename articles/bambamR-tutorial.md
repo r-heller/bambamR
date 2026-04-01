@@ -1,5 +1,7 @@
 # 5-Minute Tutorial: RNA-Seq Analysis with bambamR
 
+![](../reference/figures/logo.png)
+
 This tutorial walks through a complete RNA-seq analysis in under 5
 minutes using only bambamR’s built-in example data. **No Bioconductor
 packages are required.**

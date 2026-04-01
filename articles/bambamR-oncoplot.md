@@ -1,5 +1,7 @@
 # Creating Onco Plots with bambamR
 
+![](../reference/figures/logo.png)
+
 ## Overview
 
 The
