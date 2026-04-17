@@ -11,11 +11,11 @@ available.
 
 Useful links:
 
-- <https://rabanheller.github.io/bambamR/>
+- <https://r-heller.github.io/bambamR/>
 
-- <https://github.com/rabanheller/bambamR>
+- <https://github.com/r-heller/bambamR>
 
-- Report bugs at <https://github.com/rabanheller/bambamR/issues>
+- Report bugs at <https://github.com/r-heller/bambamR/issues>
 
 ## Author
 
