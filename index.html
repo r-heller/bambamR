@@ -66,53 +66,53 @@
 <col width="38%">
 <col width="38%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Feature</th>
 <th align="center">Minimal (CRAN-only)</th>
 <th align="center">Full (+ Bioconductor)</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>CPM / TPM normalization</td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
 </tr>
-<tr class="even">
+<tr>
 <td>TMM / RLE normalization</td>
 <td align="center">–</td>
 <td align="center">Yes (edgeR / DESeq2)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Differential expression</td>
 <td align="center">–</td>
 <td align="center">Yes (DESeq2, edgeR, limma-voom)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>PCA, volcano, heatmap, MA</td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Onco plots</strong></td>
 <td align="center"><strong>Yes</strong></td>
 <td align="center"><strong>Yes</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>FASTQ / BAM import</td>
 <td align="center">Base-R fallback</td>
 <td align="center">ShortRead / Rsamtools</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Alignment wrappers</td>
 <td align="center">STAR / HISAT2 / minimap2</td>
 <td align="center">STAR / HISAT2 / minimap2</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Read counting</td>
 <td align="center">featureCounts CLI</td>
 <td align="center">GenomicAlignments</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Shiny interactive app</td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
@@ -150,20 +150,20 @@
 <col width="50%">
 <col width="50%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Function</th>
 <th>Contents</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/bb_example_counts.html">bb_example_counts()</a></code></td>
 <td>RNA-seq count matrix (200 genes x 10 samples) with sample metadata (condition, batch, sex, age). First 20 genes have simulated DE between control and treatment.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/bb_example_mutations.html">bb_example_mutations()</a></code></td>
 <td>Mutation calls (300 mutations, 50 samples, 20 cancer genes) plus clinical annotations (Stage, Gender, Smoking) for oncoplot demos.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/bb_example_de.html">bb_example_de()</a></code></td>
 <td>Pre-computed DE results (500 genes) with log2FC, p-values, and base means – works without Bioconductor.</td>
 </tr>

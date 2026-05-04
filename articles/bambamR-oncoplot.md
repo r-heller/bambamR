@@ -11,6 +11,7 @@ the mutation landscape across samples. It is built entirely with ggplot2
 and returns a modifiable ggplot object.
 
 ``` r
+
 library(bambamR)
 #> bambamR: Full mode (all Bioconductor packages available)
 library(ggplot2)
@@ -26,6 +27,7 @@ accepts two input formats:
 A data.frame with columns `sample`, `gene`, and `mutation_type`:
 
 ``` r
+
 # Load bundled example mutation data
 ex <- bb_example_mutations()
 mut_data <- ex$mutations
@@ -48,6 +50,7 @@ A data.frame with MAF-style columns: `Hugo_Symbol`,
 ## Basic Oncoplot
 
 ``` r
+
 bb_oncoplot(mut_data, n_genes = 10)
 ```
 
@@ -58,6 +61,7 @@ bb_oncoplot(mut_data, n_genes = 10)
 Pass a named character vector to `mutation_colors`:
 
 ``` r
+
 my_colors <- c(
   "Missense_Mutation" = "#3182BD",
   "Nonsense_Mutation" = "#E6550D",
@@ -77,6 +81,7 @@ bb_oncoplot(mut_data, n_genes = 10, mutation_colors = my_colors)
 ## Selecting Specific Genes
 
 ``` r
+
 bb_oncoplot(mut_data, genes = c("TP53", "KRAS", "PIK3CA", "BRAF", "EGFR"))
 ```
 
@@ -87,6 +92,7 @@ bb_oncoplot(mut_data, genes = c("TP53", "KRAS", "PIK3CA", "BRAF", "EGFR"))
 Provide a data.frame with sample annotations:
 
 ``` r
+
 # Use the bundled clinical annotations
 bb_oncoplot(mut_data, n_genes = 8, annotation_df = clinical_data)
 ```
@@ -99,6 +105,7 @@ Sort samples by mutation frequency (default) or by co-occurrence
 clustering:
 
 ``` r
+
 bb_oncoplot(mut_data, n_genes = 8, sort_by = "cluster")
 ```
 
@@ -111,6 +118,7 @@ Since
 returns a ggplot object, you can further customize:
 
 ``` r
+
 p <- bb_oncoplot(mut_data, n_genes = 8, show_barplot = FALSE,
                   title = "Mutation Landscape")
 p + theme(legend.position = "right")
@@ -121,6 +129,7 @@ p + theme(legend.position = "right")
 ## Exporting Publication-Quality Figures
 
 ``` r
+
 p <- bb_oncoplot(mut_data, n_genes = 15, title = "Cohort Mutation Landscape")
 ggsave("oncoplot.pdf", p, width = 12, height = 8, dpi = 300)
 ggsave("oncoplot.png", p, width = 12, height = 8, dpi = 300)

@@ -61,6 +61,6 @@ qc
 #> bambamR QC Summary
 #> ==================
 #> Files analyzed: 1 
-#>   file3264304cb9e7.fastq: 2 reads
+#>   file32931b85965d.fastq: 2 reads
 # }
 ```

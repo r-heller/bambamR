@@ -13,21 +13,22 @@ bambamR never breaks if Bioconductor is missing. Every function that
 needs an optional package checks first and either falls back gracefully
 or gives a clear install instruction.
 
-| Feature                   |   Minimal (CRAN-only)    |      Full (+ Bioconductor)      |
-|---------------------------|:------------------------:|:-------------------------------:|
-| CPM / TPM normalization   |           Yes            |               Yes               |
-| TMM / RLE normalization   |            –             |      Yes (edgeR / DESeq2)       |
-| Differential expression   |            –             | Yes (DESeq2, edgeR, limma-voom) |
-| PCA, volcano, heatmap, MA |           Yes            |               Yes               |
-| **Onco plots**            |         **Yes**          |             **Yes**             |
-| FASTQ / BAM import        |     Base-R fallback      |      ShortRead / Rsamtools      |
-| Alignment wrappers        | STAR / HISAT2 / minimap2 |    STAR / HISAT2 / minimap2     |
-| Read counting             |    featureCounts CLI     |        GenomicAlignments        |
-| Shiny interactive app     |           Yes            |               Yes               |
+| Feature | Minimal (CRAN-only) | Full (+ Bioconductor) |
+|----|:--:|:--:|
+| CPM / TPM normalization | Yes | Yes |
+| TMM / RLE normalization | – | Yes (edgeR / DESeq2) |
+| Differential expression | – | Yes (DESeq2, edgeR, limma-voom) |
+| PCA, volcano, heatmap, MA | Yes | Yes |
+| **Onco plots** | **Yes** | **Yes** |
+| FASTQ / BAM import | Base-R fallback | ShortRead / Rsamtools |
+| Alignment wrappers | STAR / HISAT2 / minimap2 | STAR / HISAT2 / minimap2 |
+| Read counting | featureCounts CLI | GenomicAlignments |
+| Shiny interactive app | Yes | Yes |
 
 ## Installation
 
 ``` r
+
 # Install from CRAN (when available)
 install.packages("bambamR")
 
@@ -39,6 +40,7 @@ pak::pak("r-heller/bambamR")
 Optionally install Bioconductor packages for full-mode features:
 
 ``` r
+
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
@@ -54,11 +56,11 @@ BiocManager::install(c(
 bambamR ships with ready-to-use example data so you can explore every
 feature without downloading external files or installing Bioconductor:
 
-| Function                                                                                         | Contents                                                                                                                                                         |
-|--------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`bb_example_counts()`](https://r-heller.github.io/bambamR/reference/bb_example_counts.md)       | RNA-seq count matrix (200 genes x 10 samples) with sample metadata (condition, batch, sex, age). First 20 genes have simulated DE between control and treatment. |
-| [`bb_example_mutations()`](https://r-heller.github.io/bambamR/reference/bb_example_mutations.md) | Mutation calls (300 mutations, 50 samples, 20 cancer genes) plus clinical annotations (Stage, Gender, Smoking) for oncoplot demos.                               |
-| [`bb_example_de()`](https://r-heller.github.io/bambamR/reference/bb_example_de.md)               | Pre-computed DE results (500 genes) with log2FC, p-values, and base means – works without Bioconductor.                                                          |
+| Function | Contents |
+|----|----|
+| [`bb_example_counts()`](https://r-heller.github.io/bambamR/reference/bb_example_counts.md) | RNA-seq count matrix (200 genes x 10 samples) with sample metadata (condition, batch, sex, age). First 20 genes have simulated DE between control and treatment. |
+| [`bb_example_mutations()`](https://r-heller.github.io/bambamR/reference/bb_example_mutations.md) | Mutation calls (300 mutations, 50 samples, 20 cancer genes) plus clinical annotations (Stage, Gender, Smoking) for oncoplot demos. |
+| [`bb_example_de()`](https://r-heller.github.io/bambamR/reference/bb_example_de.md) | Pre-computed DE results (500 genes) with log2FC, p-values, and base means – works without Bioconductor. |
 
 A small FASTQ file (`example_reads.fastq`, 100 reads) and gene-length
 table are also included under `inst/extdata/`.
@@ -66,6 +68,7 @@ table are also included under `inst/extdata/`.
 ## Quick Start
 
 ``` r
+
 library(bambamR)
 
 # ── 1. Load example data ───────────────────────────────────
@@ -116,6 +119,7 @@ When you have FASTQ files, a genome index, and a GTF annotation, run the
 entire pipeline in one call:
 
 ``` r
+
 result <- bb_pipeline(
   fastq_dir    = "raw_reads/",
   genome_index = "STAR_index/",
@@ -136,6 +140,7 @@ result$plots$volcano
 You can also enter the pipeline at any stage:
 
 ``` r
+
 # From BAM files (skip alignment)
 result <- bb_pipeline(bam_dir = "aligned/", annotation = "genes.gtf",
                       sample_info = meta)
@@ -147,6 +152,7 @@ result <- bb_pipeline(count_matrix = my_counts, sample_info = meta)
 ## Interactive Shiny App
 
 ``` r
+
 bb_run_app()
 ```
 

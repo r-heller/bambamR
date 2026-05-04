@@ -9,6 +9,7 @@ packages are required.**
 ## Load the Package
 
 ``` r
+
 library(bambamR)
 #> bambamR: Full mode (all Bioconductor packages available)
 ```
@@ -16,6 +17,7 @@ library(bambamR)
 ## 1. Load Data and Normalize
 
 ``` r
+
 # Bundled example: 200 genes x 10 samples (5 control, 5 treatment)
 ex <- bb_example_counts()
 cpm <- bb_normalize(ex$counts, method = "cpm")
@@ -26,6 +28,7 @@ cat(nrow(cpm), "genes,", ncol(cpm), "samples\n")
 ## 2. PCA: Do the Groups Separate?
 
 ``` r
+
 bb_pca(cpm, ex$metadata, color_by = "condition", label = TRUE)
 ```
 
@@ -36,6 +39,7 @@ bb_pca(cpm, ex$metadata, color_by = "condition", label = TRUE)
 Use the pre-computed DE results (no Bioconductor needed):
 
 ``` r
+
 de <- bb_example_de()
 bb_volcano(de, fc_cutoff = 1, p_cutoff = 0.05, n_label = 6)
 #> Warning: Removed 494 rows containing missing values or values outside the scale range
@@ -47,6 +51,7 @@ bb_volcano(de, fc_cutoff = 1, p_cutoff = 0.05, n_label = 6)
 ## 4. MA Plot: Effect vs. Expression
 
 ``` r
+
 bb_ma_plot(de)
 ```
 
@@ -55,6 +60,7 @@ bb_ma_plot(de)
 ## 5. Heatmap: Top DE Genes
 
 ``` r
+
 bb_heatmap(cpm, de_result = de, n_genes = 20)
 ```
 
@@ -63,6 +69,7 @@ bb_heatmap(cpm, de_result = de, n_genes = 20)
 ## 6. Oncoplot: Mutation Landscape
 
 ``` r
+
 mut <- bb_example_mutations()
 bb_oncoplot(mut$mutations, n_genes = 10, annotation_df = mut$clinical)
 ```
@@ -72,6 +79,7 @@ bb_oncoplot(mut$mutations, n_genes = 10, annotation_df = mut$clinical)
 ## 7. Export
 
 ``` r
+
 bb_export_csv(de, "my_results.csv")
 ```
 

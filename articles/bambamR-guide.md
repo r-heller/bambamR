@@ -39,18 +39,21 @@ volcano plots, heatmaps, PCA, and MA plots.
 Install from CRAN (when available):
 
 ``` r
+
 install.packages("bambamR")
 ```
 
 Install the development version from GitHub:
 
 ``` r
+
 pak::pak("r-heller/bambamR")
 ```
 
 Optionally install Bioconductor packages for full-mode features:
 
 ``` r
+
 BiocManager::install(c(
   "DESeq2", "edgeR", "limma",
   "ShortRead", "Rsamtools",
@@ -59,6 +62,7 @@ BiocManager::install(c(
 ```
 
 ``` r
+
 library(bambamR)
 ```
 
@@ -69,13 +73,14 @@ library(bambamR)
 bambamR ships with ready-to-use datasets accessible via convenience
 functions:
 
-| Function                                                                                         | Contents                                            |
-|--------------------------------------------------------------------------------------------------|-----------------------------------------------------|
-| [`bb_example_counts()`](https://r-heller.github.io/bambamR/reference/bb_example_counts.md)       | 200 genes x 10 samples + metadata                   |
+| Function | Contents |
+|----|----|
+| [`bb_example_counts()`](https://r-heller.github.io/bambamR/reference/bb_example_counts.md) | 200 genes x 10 samples + metadata |
 | [`bb_example_mutations()`](https://r-heller.github.io/bambamR/reference/bb_example_mutations.md) | 300 mutations, 50 samples, 20 genes + clinical data |
-| [`bb_example_de()`](https://r-heller.github.io/bambamR/reference/bb_example_de.md)               | 500-gene pre-computed DE results                    |
+| [`bb_example_de()`](https://r-heller.github.io/bambamR/reference/bb_example_de.md) | 500-gene pre-computed DE results |
 
 ``` r
+
 # RNA-seq count matrix (200 genes x 10 samples)
 ex <- bb_example_counts()
 counts   <- ex$counts
@@ -83,6 +88,7 @@ metadata <- ex$metadata
 ```
 
 ``` r
+
 dim(counts)
 #> [1] 200  10
 counts[1:5, 1:5]
@@ -95,6 +101,7 @@ counts[1:5, 1:5]
 ```
 
 ``` r
+
 metadata
 #>           condition batch sex age
 #> Sample_01   control     A   M  45
@@ -118,6 +125,7 @@ metadata
 CPM normalization works without any optional dependencies:
 
 ``` r
+
 cpm <- bb_normalize(counts, method = "cpm")
 ```
 
@@ -126,6 +134,7 @@ cpm <- bb_normalize(counts, method = "cpm")
 TPM requires gene lengths:
 
 ``` r
+
 gene_lengths <- readRDS(
   system.file("extdata", "example_gene_lengths.rds", package = "bambamR")
 )
@@ -138,6 +147,7 @@ tpm <- bb_normalize(counts, method = "tpm",
 With Bioconductor installed:
 
 ``` r
+
 tmm <- bb_normalize(counts, method = "tmm")  # requires edgeR
 rle <- bb_normalize(counts, method = "rle")  # requires DESeq2
 ```
@@ -152,6 +162,7 @@ customized with `+ theme()`, `+ labs()`, etc.
 ### PCA Plot
 
 ``` r
+
 bb_pca(cpm, metadata, color_by = "condition")
 ```
 
@@ -161,6 +172,7 @@ condition.](bambamR-guide_files/figure-html/pca-1.png)
 PCA plot colored by experimental condition.
 
 ``` r
+
 bb_pca(cpm, metadata, color_by = "condition",
        shape_by = "batch", label = TRUE, point_size = 4)
 ```
@@ -175,6 +187,7 @@ PCA plot with shape mapping for batch effect.
 ### Heatmap
 
 ``` r
+
 bb_heatmap(cpm, n_genes = 30)
 ```
 
@@ -190,6 +203,7 @@ Heatmap of the 30 most variable genes.
 Using the pre-computed DE results (no Bioconductor required):
 
 ``` r
+
 de_results <- bb_example_de()
 sig <- sum(de_results$padj < 0.05, na.rm = TRUE)
 cat("Significant genes (FDR < 0.05):", sig, "\n")
@@ -197,6 +211,7 @@ cat("Significant genes (FDR < 0.05):", sig, "\n")
 ```
 
 ``` r
+
 bb_volcano(de_results, fc_cutoff = 1, p_cutoff = 0.05, n_label = 8)
 ```
 
@@ -208,6 +223,7 @@ Volcano plot highlighting differentially expressed genes.
 ------------------------------------------------------------------------
 
 ``` r
+
 bb_volcano(de_results,
            fc_cutoff = 0.5,
            p_cutoff = 0.01,
@@ -223,6 +239,7 @@ Volcano plot with custom gene labels and colors.
 ### MA Plot
 
 ``` r
+
 bb_ma_plot(de_results, p_cutoff = 0.05)
 ```
 
@@ -236,6 +253,7 @@ MA plot showing fold-change vs.~mean expression.
 ### Heatmap of Top DE Genes
 
 ``` r
+
 bb_heatmap(cpm, de_result = de_results, n_genes = 25)
 ```
 
@@ -260,6 +278,7 @@ bambamR accepts a `data.frame` with columns `sample`, `gene`, and
 `Tumor_Sample_Barcode`, and `Variant_Classification`.
 
 ``` r
+
 mut <- bb_example_mutations()
 head(mut$mutations)
 #>     sample   gene     mutation_type
@@ -274,6 +293,7 @@ head(mut$mutations)
 ### Basic Oncoplot
 
 ``` r
+
 bb_oncoplot(mut$mutations, n_genes = 10, show_barplot = FALSE)
 ```
 
@@ -287,6 +307,7 @@ Oncoplot showing the top 10 mutated genes.
 ### Oncoplot with Clinical Annotations
 
 ``` r
+
 bb_oncoplot(mut$mutations, n_genes = 8,
             annotation_df = mut$clinical, show_barplot = FALSE)
 ```
@@ -299,6 +320,7 @@ Oncoplot with clinical annotation tracks (Stage, Gender, Smoking).
 ### Selecting Specific Genes
 
 ``` r
+
 bb_oncoplot(mut$mutations, show_barplot = FALSE,
             genes = c("TP53", "KRAS", "PIK3CA", "BRAF", "EGFR"))
 ```
@@ -311,6 +333,7 @@ Oncoplot showing five selected genes.
 ### Custom Colors
 
 ``` r
+
 my_colors <- c(
   "Missense_Mutation" = "#3182BD",
   "Nonsense_Mutation" = "#E6550D",
@@ -339,6 +362,7 @@ Oncoplot with a custom color palette.
 bambamR includes a small example FASTQ file (100 reads, 75 bp):
 
 ``` r
+
 fq_path <- system.file("extdata", "example_reads.fastq",
                         package = "bambamR")
 reads <- bb_read_fastq(fq_path, n = 5)
@@ -371,6 +395,7 @@ gzipped FASTQ files.
 ## Quality Control
 
 ``` r
+
 qc <- bb_qc(fastq_path = fq_path)
 qc
 #> bambamR QC Summary
@@ -380,12 +405,14 @@ qc
 ```
 
 ``` r
+
 bb_qc_summary(qc)
 #>                  file total_reads median_gc mapping_rate
 #> 1 example_reads.fastq         100 0.4933333           NA
 ```
 
 ``` r
+
 bb_plot_qc(qc)
 ```
 
@@ -404,6 +431,7 @@ package. All three return a standardized `data.frame` with columns
 `gene`, `log2fc`, `pvalue`, `padj`, and optionally `basemean`.
 
 ``` r
+
 # DESeq2 (requires DESeq2)
 de <- bb_deseq2(counts, metadata)
 
@@ -426,6 +454,7 @@ work identically regardless of the DE method used.
 ## Export
 
 ``` r
+
 bb_export_csv(de_results, "de_results.csv")
 bb_export_tsv(de_results, "de_results.tsv")
 bb_export_rds(de_results, "de_results.rds")
@@ -441,6 +470,7 @@ function runs the entire analysis end-to-end. It accepts entry at three
 stages:
 
 ``` r
+
 # From FASTQ files
 result <- bb_pipeline(
   fastq_dir    = "raw_reads/",
@@ -471,6 +501,7 @@ The returned `bb_result` object bundles counts, metadata, DE results,
 and all generated plots:
 
 ``` r
+
 result$counts          # count matrix
 result$de_results      # standardized DE data.frame
 result$plots$pca       # ggplot object
@@ -483,6 +514,7 @@ result$plots$heatmap   # ggplot object
 Launch a browser-based dashboard for interactive analysis:
 
 ``` r
+
 bb_run_app()
 ```
 
@@ -499,68 +531,68 @@ The app provides:
 
 #### Import
 
-| Function                                                                           | Description        |
-|------------------------------------------------------------------------------------|--------------------|
-| [`bb_read_fastq()`](https://r-heller.github.io/bambamR/reference/bb_read_fastq.md) | Read FASTQ files   |
-| [`bb_read_bam()`](https://r-heller.github.io/bambamR/reference/bb_read_bam.md)     | Read BAM files     |
-| [`bb_count_bam()`](https://r-heller.github.io/bambamR/reference/bb_count_bam.md)   | Count reads in BAM |
+| Function | Description |
+|----|----|
+| [`bb_read_fastq()`](https://r-heller.github.io/bambamR/reference/bb_read_fastq.md) | Read FASTQ files |
+| [`bb_read_bam()`](https://r-heller.github.io/bambamR/reference/bb_read_bam.md) | Read BAM files |
+| [`bb_count_bam()`](https://r-heller.github.io/bambamR/reference/bb_count_bam.md) | Count reads in BAM |
 
 #### Quality Control
 
-| Function                                                                           | Description            |
-|------------------------------------------------------------------------------------|------------------------|
-| [`bb_qc()`](https://r-heller.github.io/bambamR/reference/bb_qc.md)                 | Compute QC metrics     |
-| [`bb_qc_summary()`](https://r-heller.github.io/bambamR/reference/bb_qc_summary.md) | Tabular QC summary     |
-| [`bb_plot_qc()`](https://r-heller.github.io/bambamR/reference/bb_plot_qc.md)       | QC visualization panel |
+| Function | Description |
+|----|----|
+| [`bb_qc()`](https://r-heller.github.io/bambamR/reference/bb_qc.md) | Compute QC metrics |
+| [`bb_qc_summary()`](https://r-heller.github.io/bambamR/reference/bb_qc_summary.md) | Tabular QC summary |
+| [`bb_plot_qc()`](https://r-heller.github.io/bambamR/reference/bb_plot_qc.md) | QC visualization panel |
 
 #### Alignment & Counting
 
-| Function                                                                             | Description                         |
-|--------------------------------------------------------------------------------------|-------------------------------------|
-| [`bb_align()`](https://r-heller.github.io/bambamR/reference/bb_align.md)             | Align with STAR / HISAT2 / minimap2 |
-| [`bb_count_reads()`](https://r-heller.github.io/bambamR/reference/bb_count_reads.md) | Count reads per gene                |
+| Function | Description |
+|----|----|
+| [`bb_align()`](https://r-heller.github.io/bambamR/reference/bb_align.md) | Align with STAR / HISAT2 / minimap2 |
+| [`bb_count_reads()`](https://r-heller.github.io/bambamR/reference/bb_count_reads.md) | Count reads per gene |
 
 #### Normalization
 
-| Function                                                                         | Description           |
-|----------------------------------------------------------------------------------|-----------------------|
+| Function | Description |
+|----|----|
 | [`bb_normalize()`](https://r-heller.github.io/bambamR/reference/bb_normalize.md) | CPM, TPM, TMM, or RLE |
 
 #### Differential Expression
 
-| Function                                                                           | Description                    |
-|------------------------------------------------------------------------------------|--------------------------------|
-| [`bb_deseq2()`](https://r-heller.github.io/bambamR/reference/bb_deseq2.md)         | DESeq2 wrapper                 |
-| [`bb_edger()`](https://r-heller.github.io/bambamR/reference/bb_edger.md)           | edgeR quasi-likelihood wrapper |
-| [`bb_limma_voom()`](https://r-heller.github.io/bambamR/reference/bb_limma_voom.md) | limma-voom wrapper             |
+| Function | Description |
+|----|----|
+| [`bb_deseq2()`](https://r-heller.github.io/bambamR/reference/bb_deseq2.md) | DESeq2 wrapper |
+| [`bb_edger()`](https://r-heller.github.io/bambamR/reference/bb_edger.md) | edgeR quasi-likelihood wrapper |
+| [`bb_limma_voom()`](https://r-heller.github.io/bambamR/reference/bb_limma_voom.md) | limma-voom wrapper |
 
 #### Visualization
 
-| Function                                                                       | Description             |
-|--------------------------------------------------------------------------------|-------------------------|
+| Function | Description |
+|----|----|
 | [`bb_oncoplot()`](https://r-heller.github.io/bambamR/reference/bb_oncoplot.md) | Waterfall mutation plot |
-| [`bb_volcano()`](https://r-heller.github.io/bambamR/reference/bb_volcano.md)   | Volcano plot            |
-| [`bb_heatmap()`](https://r-heller.github.io/bambamR/reference/bb_heatmap.md)   | Clustered heatmap       |
-| [`bb_pca()`](https://r-heller.github.io/bambamR/reference/bb_pca.md)           | PCA plot                |
-| [`bb_ma_plot()`](https://r-heller.github.io/bambamR/reference/bb_ma_plot.md)   | MA plot                 |
+| [`bb_volcano()`](https://r-heller.github.io/bambamR/reference/bb_volcano.md) | Volcano plot |
+| [`bb_heatmap()`](https://r-heller.github.io/bambamR/reference/bb_heatmap.md) | Clustered heatmap |
+| [`bb_pca()`](https://r-heller.github.io/bambamR/reference/bb_pca.md) | PCA plot |
+| [`bb_ma_plot()`](https://r-heller.github.io/bambamR/reference/bb_ma_plot.md) | MA plot |
 
 #### Pipeline & Export
 
-| Function                                                                           | Description              |
-|------------------------------------------------------------------------------------|--------------------------|
-| [`bb_pipeline()`](https://r-heller.github.io/bambamR/reference/bb_pipeline.md)     | Full end-to-end pipeline |
-| [`bb_export_csv()`](https://r-heller.github.io/bambamR/reference/bb_export_csv.md) | Export as CSV            |
-| [`bb_export_tsv()`](https://r-heller.github.io/bambamR/reference/bb_export_tsv.md) | Export as TSV            |
-| [`bb_export_rds()`](https://r-heller.github.io/bambamR/reference/bb_export_rds.md) | Export as RDS            |
+| Function | Description |
+|----|----|
+| [`bb_pipeline()`](https://r-heller.github.io/bambamR/reference/bb_pipeline.md) | Full end-to-end pipeline |
+| [`bb_export_csv()`](https://r-heller.github.io/bambamR/reference/bb_export_csv.md) | Export as CSV |
+| [`bb_export_tsv()`](https://r-heller.github.io/bambamR/reference/bb_export_tsv.md) | Export as TSV |
+| [`bb_export_rds()`](https://r-heller.github.io/bambamR/reference/bb_export_rds.md) | Export as RDS |
 
 #### Example Data & App
 
-| Function                                                                                         | Description            |
-|--------------------------------------------------------------------------------------------------|------------------------|
-| [`bb_example_counts()`](https://r-heller.github.io/bambamR/reference/bb_example_counts.md)       | Example count matrix   |
-| [`bb_example_mutations()`](https://r-heller.github.io/bambamR/reference/bb_example_mutations.md) | Example mutation data  |
-| [`bb_example_de()`](https://r-heller.github.io/bambamR/reference/bb_example_de.md)               | Example DE results     |
-| [`bb_run_app()`](https://r-heller.github.io/bambamR/reference/bb_run_app.md)                     | Launch Shiny dashboard |
+| Function | Description |
+|----|----|
+| [`bb_example_counts()`](https://r-heller.github.io/bambamR/reference/bb_example_counts.md) | Example count matrix |
+| [`bb_example_mutations()`](https://r-heller.github.io/bambamR/reference/bb_example_mutations.md) | Example mutation data |
+| [`bb_example_de()`](https://r-heller.github.io/bambamR/reference/bb_example_de.md) | Example DE results |
+| [`bb_run_app()`](https://r-heller.github.io/bambamR/reference/bb_run_app.md) | Launch Shiny dashboard |
 
 ## Citation
 
@@ -573,8 +605,9 @@ If you use bambamR in your research, please cite:
 ## Session Info
 
 ``` r
+
 sessionInfo()
-#> R version 4.5.3 (2026-03-11)
+#> R version 4.6.0 (2026-04-24)
 #> Platform: x86_64-pc-linux-gnu
 #> Running under: Ubuntu 24.04.4 LTS
 #> 
@@ -598,51 +631,51 @@ sessionInfo()
 #> [1] bambamR_0.1.0
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] farver_2.1.2                Biostrings_2.78.0          
-#>  [3] S7_0.2.1-1                  bitops_1.0-9               
-#>  [5] fastmap_1.2.0               GenomicAlignments_1.46.0   
+#>  [1] farver_2.1.2                Biostrings_2.80.0          
+#>  [3] S7_0.2.2                    bitops_1.0-9               
+#>  [5] fastmap_1.2.0               GenomicAlignments_1.48.0   
 #>  [7] digest_0.6.39               lifecycle_1.0.5            
-#>  [9] pwalign_1.6.0               cluster_2.1.8.2            
-#> [11] statmod_1.5.1               compiler_4.5.3             
+#>  [9] pwalign_1.8.0               cluster_2.1.8.2            
+#> [11] statmod_1.5.1               compiler_4.6.0             
 #> [13] rlang_1.2.0                 sass_0.4.10                
-#> [15] tools_4.5.3                 yaml_2.3.12                
-#> [17] knitr_1.51                  S4Arrays_1.10.1            
+#> [15] tools_4.6.0                 yaml_2.3.12                
+#> [17] knitr_1.51                  S4Arrays_1.12.0            
 #> [19] labeling_0.4.3              htmlwidgets_1.6.4          
-#> [21] interp_1.1-6                DelayedArray_0.36.1        
-#> [23] RColorBrewer_1.1-3          ShortRead_1.69.3-2         
-#> [25] abind_1.4-8                 BiocParallel_1.44.0        
+#> [21] interp_1.1-6                DelayedArray_0.38.1        
+#> [23] RColorBrewer_1.1-3          ShortRead_1.70.0           
+#> [25] abind_1.4-8                 BiocParallel_1.46.0        
 #> [27] withr_3.0.2                 hwriter_1.3.2.1            
-#> [29] BiocGenerics_0.56.0         desc_1.4.3                 
-#> [31] grid_4.5.3                  stats4_4.5.3               
+#> [29] BiocGenerics_0.58.0         desc_1.4.3                 
+#> [31] grid_4.6.0                  stats4_4.6.0               
 #> [33] latticeExtra_0.6-31         colorspace_2.1-2           
-#> [35] edgeR_4.8.2                 ggplot2_4.0.2              
+#> [35] edgeR_4.10.0                ggplot2_4.0.3              
 #> [37] scales_1.4.0                iterators_1.0.14           
-#> [39] SummarizedExperiment_1.40.0 cli_3.6.6                  
+#> [39] SummarizedExperiment_1.42.0 cli_3.6.6                  
 #> [41] rmarkdown_2.31              crayon_1.5.3               
 #> [43] ragg_1.5.2                  generics_0.1.4             
 #> [45] otel_0.2.0                  rjson_0.2.23               
-#> [47] cachem_1.1.0                parallel_4.5.3             
-#> [49] XVector_0.50.0              matrixStats_1.5.0          
-#> [51] vctrs_0.7.3                 Matrix_1.7-4               
-#> [53] jsonlite_2.0.0              IRanges_2.44.0             
+#> [47] cachem_1.1.0                parallel_4.6.0             
+#> [49] XVector_0.52.0              matrixStats_1.5.0          
+#> [51] vctrs_0.7.3                 Matrix_1.7-5               
+#> [53] jsonlite_2.0.0              IRanges_2.46.0             
 #> [55] GetoptLong_1.1.1            patchwork_1.3.2            
-#> [57] S4Vectors_0.49.1-1          ggrepel_0.9.8              
+#> [57] S4Vectors_0.50.0            ggrepel_0.9.8              
 #> [59] clue_0.3-68                 systemfonts_1.3.2          
 #> [61] jpeg_0.1-11                 locfit_1.5-9.12            
-#> [63] foreach_1.5.2               limma_3.66.0               
-#> [65] jquerylib_0.1.4             glue_1.8.0                 
+#> [63] foreach_1.5.2               limma_3.68.1               
+#> [65] jquerylib_0.1.4             glue_1.8.1                 
 #> [67] pkgdown_2.2.0               codetools_0.2-20           
 #> [69] gtable_0.3.6                shape_1.4.6.1              
-#> [71] deldir_2.0-4                GenomicRanges_1.62.1       
-#> [73] ComplexHeatmap_2.26.1       htmltools_0.5.9            
-#> [75] Seqinfo_1.0.0               circlize_0.4.18            
+#> [71] deldir_2.0-4                GenomicRanges_1.64.0       
+#> [73] ComplexHeatmap_2.28.0       htmltools_0.5.9            
+#> [75] Seqinfo_1.2.0               circlize_0.4.18            
 #> [77] R6_2.6.1                    textshaping_1.0.5          
 #> [79] doParallel_1.0.17           evaluate_1.0.5             
-#> [81] lattice_0.22-9              Biobase_2.70.0             
-#> [83] png_0.1-9                   Rsamtools_2.26.0           
-#> [85] cigarillo_1.0.0             bslib_0.10.0               
-#> [87] Rcpp_1.1.1-1                SparseArray_1.10.10        
-#> [89] DESeq2_1.50.2               xfun_0.57                  
-#> [91] fs_2.0.1                    MatrixGenerics_1.22.0      
+#> [81] lattice_0.22-9              Biobase_2.72.0             
+#> [83] png_0.1-9                   Rsamtools_2.28.0           
+#> [85] cigarillo_1.2.0             bslib_0.10.0               
+#> [87] Rcpp_1.1.1-1.1              SparseArray_1.12.2         
+#> [89] DESeq2_1.52.0               xfun_0.57                  
+#> [91] fs_2.1.0                    MatrixGenerics_1.24.0      
 #> [93] GlobalOptions_0.1.4
 ```

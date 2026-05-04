@@ -23,6 +23,7 @@ example data – no external files required.
 ## Installation
 
 ``` r
+
 # CRAN
 install.packages("bambamR")
 
@@ -34,6 +35,7 @@ BiocManager::install(c("DESeq2", "edgeR", "limma", "ShortRead", "Rsamtools"))
 ```
 
 ``` r
+
 library(bambamR)
 #> bambamR: Full mode (all Bioconductor packages available)
 ```
@@ -46,6 +48,7 @@ bambamR ships with three example datasets accessible via convenience
 functions. Nothing to download – they are bundled with the package.
 
 ``` r
+
 # RNA-seq count matrix: 200 genes x 10 samples (5 control, 5 treatment)
 ex <- bb_example_counts()
 counts   <- ex$counts
@@ -55,6 +58,7 @@ metadata <- ex$metadata
 Let’s inspect the data:
 
 ``` r
+
 dim(counts)
 #> [1] 200  10
 counts[1:6, 1:5]
@@ -68,6 +72,7 @@ counts[1:6, 1:5]
 ```
 
 ``` r
+
 metadata
 #>           condition batch sex age
 #> Sample_01   control     A   M  45
@@ -93,6 +98,7 @@ have simulated differential expression between conditions.
 CPM normalization works everywhere – no Bioconductor needed:
 
 ``` r
+
 cpm <- bb_normalize(counts, method = "cpm")
 head(cpm[, 1:3])
 #>        Sample_01 Sample_02 Sample_03
@@ -107,6 +113,7 @@ head(cpm[, 1:3])
 TPM normalization requires gene lengths (also bundled):
 
 ``` r
+
 gene_lengths <- readRDS(
   system.file("extdata", "example_gene_lengths.rds", package = "bambamR")
 )
@@ -125,7 +132,9 @@ With Bioconductor installed you can also use `"tmm"` (edgeR) or `"rle"`
 (DESeq2):
 
 ``` r
+
 tmm <- bb_normalize(counts, method = "tmm")
+#> calcNormFactors has been renamed to normLibSizes
 ```
 
 ------------------------------------------------------------------------
@@ -135,6 +144,7 @@ tmm <- bb_normalize(counts, method = "tmm")
 Visualize sample-level structure. Color by any metadata column:
 
 ``` r
+
 bb_pca(cpm, metadata, color_by = "condition")
 ```
 
@@ -143,6 +153,7 @@ bb_pca(cpm, metadata, color_by = "condition")
 Add shape mapping and sample labels:
 
 ``` r
+
 bb_pca(cpm, metadata, color_by = "condition", shape_by = "batch", label = TRUE)
 ```
 
@@ -155,6 +166,7 @@ bb_pca(cpm, metadata, color_by = "condition", shape_by = "batch", label = TRUE)
 Show the top 30 most variable genes:
 
 ``` r
+
 bb_heatmap(cpm, n_genes = 30)
 ```
 
@@ -167,6 +179,7 @@ bb_heatmap(cpm, n_genes = 30)
 ### Option A: With DESeq2 (requires Bioconductor)
 
 ``` r
+
 de_results <- bb_deseq2(counts, metadata)
 #> estimating size factors
 #> estimating dispersions
@@ -193,6 +206,7 @@ bambamR bundles a realistic pre-computed DE result set so you can
 explore all downstream plots without installing Bioconductor:
 
 ``` r
+
 de_results <- bb_example_de()
 head(de_results[order(de_results$padj), ])
 #>     gene   log2fc       pvalue       padj   basemean
@@ -205,6 +219,7 @@ head(de_results[order(de_results$padj), ])
 ```
 
 ``` r
+
 cat("Total genes:", nrow(de_results), "\n")
 #> Total genes: 500
 cat("Significant (padj < 0.05):", sum(de_results$padj < 0.05, na.rm = TRUE), "\n")
@@ -222,6 +237,7 @@ cat("Down-regulated (log2FC < -1):",
 ## Step 6: Volcano Plot
 
 ``` r
+
 bb_volcano(de_results, fc_cutoff = 1, p_cutoff = 0.05, n_label = 8)
 #> Warning: Removed 492 rows containing missing values or values outside the scale range
 #> (`geom_text_repel()`).
@@ -232,6 +248,7 @@ bb_volcano(de_results, fc_cutoff = 1, p_cutoff = 0.05, n_label = 8)
 Customize the cutoffs and label specific genes:
 
 ``` r
+
 bb_volcano(de_results,
            fc_cutoff = 0.5,
            p_cutoff = 0.01,
@@ -251,6 +268,7 @@ The MA plot shows log2 fold-change vs. mean expression, highlighting
 genes that change at different expression levels:
 
 ``` r
+
 bb_ma_plot(de_results, p_cutoff = 0.05)
 ```
 
@@ -266,6 +284,7 @@ to show the top differentially expressed genes instead of the most
 variable:
 
 ``` r
+
 bb_heatmap(cpm, de_result = de_results, n_genes = 25)
 ```
 
@@ -279,6 +298,7 @@ The oncoplot is bambamR’s signature visualization – a waterfall-style
 mutation landscape across samples. Load the bundled mutation data:
 
 ``` r
+
 mut <- bb_example_mutations()
 head(mut$mutations)
 #>     sample   gene     mutation_type
@@ -301,6 +321,7 @@ head(mut$clinical)
 ### Basic Oncoplot
 
 ``` r
+
 bb_oncoplot(mut$mutations, n_genes = 10)
 ```
 
@@ -309,6 +330,7 @@ bb_oncoplot(mut$mutations, n_genes = 10)
 ### With Clinical Annotations
 
 ``` r
+
 bb_oncoplot(mut$mutations, n_genes = 10, annotation_df = mut$clinical)
 ```
 
@@ -317,6 +339,7 @@ bb_oncoplot(mut$mutations, n_genes = 10, annotation_df = mut$clinical)
 ### Select Specific Genes
 
 ``` r
+
 bb_oncoplot(mut$mutations,
             genes = c("TP53", "KRAS", "PIK3CA", "BRAF", "EGFR"))
 ```
@@ -334,6 +357,7 @@ for more customization options.
 bambamR includes a small example FASTQ file (100 reads):
 
 ``` r
+
 fq_path <- system.file("extdata", "example_reads.fastq", package = "bambamR")
 reads <- bb_read_fastq(fq_path, n = 5)
 reads
@@ -358,6 +382,7 @@ reads
 ```
 
 ``` r
+
 all_reads <- bb_read_fastq(fq_path)
 cat("Total reads:", nrow(all_reads), "\n")
 #> Total reads: 100
@@ -372,6 +397,7 @@ cat("Read length:", nchar(all_reads$sequence[1]), "bp\n")
 Run QC on the example FASTQ file:
 
 ``` r
+
 qc <- bb_qc(fastq_path = fq_path)
 qc
 #> bambamR QC Summary
@@ -381,6 +407,7 @@ qc
 ```
 
 ``` r
+
 bb_qc_summary(qc)
 #>                  file total_reads median_gc mapping_rate
 #> 1 example_reads.fastq         100 0.4933333           NA
@@ -389,6 +416,7 @@ bb_qc_summary(qc)
 Visualize QC metrics:
 
 ``` r
+
 bb_plot_qc(qc)
 ```
 
@@ -401,6 +429,7 @@ bb_plot_qc(qc)
 Save your results in various formats:
 
 ``` r
+
 # Save DE results as CSV / TSV
 bb_export_csv(de_results, "de_results.csv")
 bb_export_tsv(de_results, "de_results.tsv")
@@ -417,6 +446,7 @@ When you have real data (FASTQ files, a genome index, and a GTF
 annotation), run the entire pipeline with a single function:
 
 ``` r
+
 result <- bb_pipeline(
   fastq_dir    = "raw_reads/",
   genome_index = "STAR_index/",
@@ -438,6 +468,7 @@ result$plots$heatmap   # ggplot object
 You can enter the pipeline at any stage:
 
 ``` r
+
 # From BAM files (skip alignment)
 result <- bb_pipeline(
   bam_dir    = "aligned/",
@@ -460,6 +491,7 @@ result <- bb_pipeline(
 For a point-and-click interface, launch the Shiny app:
 
 ``` r
+
 bb_run_app()
 ```
 
